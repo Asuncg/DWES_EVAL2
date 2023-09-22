@@ -47,6 +47,6 @@ public class Persona {
  * Método para emitir mensaje en consola con los datos de la Persona.
  */
     public void imprime() {
-        System.out.println("Nombre: " + nombre + ", Dni: " + dni);
+        System.out.println("Nombre: " + nombre + ", Dni: " + dni + ", Sexo: " + sexo);
     }
 }

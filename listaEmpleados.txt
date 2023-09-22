@@ -1,1 +1,3 @@
-Asun
+James Cosling, 32000031R, M, 4, 7
+Ada Lovelace, 32000031G, F, 1, 1
+Asun Carmona, 11223344, F, 3, 2

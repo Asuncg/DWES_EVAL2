@@ -1,47 +1,49 @@
 package Laboral;
 
-/**
- * @Author: Asun C.G
- * La clase CalculaNomias realiza los cálculos necesario para saber el valor de la nómina del empleado.
- */
+import java.io.*;
 
 public class CalculaNominas {
 
-    /**
-     * El método principal de la aplicación que demuestra el cálculo de nóminas para dos empleados.
-     */
     public static void main(String[] args) {
-
         try {
-            Empleado empleado1 = new Empleado("James Cosling", "dni=32000032G", 'M', 4, 7);
-            Empleado empleado2 = new Empleado("Ada Lovelace", "32000031R", 'F');
+            BufferedReader reader = new BufferedReader(new FileReader("listaempleados.txt"));
+            String line;
 
-            escribe(empleado1, empleado2);
+            while ((line = reader.readLine()) != null) {
 
-            empleado2.incrAnyo();
+                Empleado empleado = parseEmpleado(line);
+                escribe(empleado);
+            }
 
-            empleado1.setCategoria(9);
-
-            escribe(empleado1, empleado2);
-
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
         } catch (DatosNoCorrectosException e) {
-            System.out.println("Datos no correctos: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
-    /**
-     * Imprime la información del empleado y calcula sus respectivos sueldos sueldo.
-     *
-     * @param empleado1 El primer empleado.
-     * @param empleado2 El segundo empleado.
-     */
-    private static void escribe(Empleado empleado1, Empleado empleado2) {
+    private static Empleado parseEmpleado(String input) throws DatosNoCorrectosException {
+        // Separar la línea en partes (nombre, dni, sexo, categoría, años)
+        String[] partes = input.split(",");
+        if (partes.length < 5) {
+            throw new DatosNoCorrectosException("La línea no tiene suficientes datos.");
+        }
 
+        String nombre = partes[0].trim();
+        String dni = partes[1].trim();
+        char sexo = partes[2].trim().charAt(0);
+        int categoria = Integer.parseInt(partes[3].trim());
+        int anyos = Integer.parseInt(partes[4].trim());
+
+        // Crear y retornar una instancia de Empleado
+        return new Empleado(nombre, dni, sexo, categoria, anyos);
+    }
+
+    private static void escribe(Empleado empleado) {
         Nomina nomina = new Nomina();
 
-        empleado1.imprime();
-        System.out.println("Sueldo: " + nomina.sueldo(empleado1.getCategoria(), empleado1.anyos) + "€");
-        empleado2.imprime();
-        System.out.println("Sueldo: " + nomina.sueldo(empleado2.getCategoria(), empleado2.anyos) + "€");
+        empleado.imprime();
+        System.out.println("Sueldo: " + nomina.sueldo(empleado.getCategoria(), empleado.anyos) + "€");
     }
 }
